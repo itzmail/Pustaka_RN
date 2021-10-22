@@ -15,14 +15,15 @@ export default class ReactMaps extends React.Component {
     latitude: 0,
     longitude: 0,
     coordinates: [
-      {name: 'Tengkleng', latitude: 37.8025259, longitude: -122.4351431, image: require('../assets/food1.jpg')},
-      {name: 'Sayur', latitude: 37.7896386, longitude: -122.421646, image: require('../assets/food2.jpg')},
-      {name: 'Roti Bakar', latitude: 37.7665248, longitude: -122.44161628, image: require('../assets/food3.jpg')},
+      {name: 'Tengkleng', latitude: 37.43206039081665, longitude: -122.08609767258167, image: require('../assets/food1.jpg'), color: 'purple'},
+      {name: 'Sayur', latitude: 37.42165709646536, longitude: -122.09261175245047, image: require('../assets/food2.jpg'), color: 'green' },
+      {name: 'Roti Bakar', latitude: 37.425075408940685, longitude: -122.0774844288826, image: require('../assets/food3.jpg'), color: 'blue'},
       // {name: '4', latitude: 37.7734153, longitude: -122.4577787},
       // {name: '5', latitude: 37.7948605, longitude: -122.4596065},
       // {name: '6', latitude: 37.8025259, longitude: -122.4351431},
     ],
     activeIndex: 0,
+    tryMarker: null
   };
 
   showMesage() {
@@ -31,19 +32,20 @@ export default class ReactMaps extends React.Component {
 
   componentDidMount() {
     this.requestLocationPermission()
+
   }
 
   async requestLocationPermission() {
     if (Platform.OS === 'ios') {
       let response = await request(PERMISSIONS.IOS.LOCATION_WHEN_IN_USE);
-      console.log(`iphone ${response}`)
+      // console.log(`iphone ${response}`)
 
       if(response === 'granted') {
         this.locateCurrentPosition()
       }
     } else {
       let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
-      console.log(`android ${response}`)
+      // console.log(`android ${response}`)
 
       if(response === 'granted') {
         this.locateCurrentPosition()
@@ -55,7 +57,7 @@ export default class ReactMaps extends React.Component {
     Geolocation.getCurrentPosition(
       // Success
       position => {
-        console.log(JSON.stringify(position))
+        // console.log(JSON.stringify(position))
 
         let region = {
           latitude: position.coords.latitude,
@@ -89,13 +91,15 @@ export default class ReactMaps extends React.Component {
         provider={PROVIDER_GOOGLE}
         ref={map => this._map = map}
         region={this.state.initialPosition}
-        style={styles.map}>
-      
-        
+        style={styles.map}
+        onPress={e => console.log(e.nativeEvent)}
+        >
         <Marker
           draggable
           coordinate={{latitude:this.state.latitude, longitude: this.state.longitude}}
-          title={'San Francisco'}>
+          title={'San Francisco'}
+          onDragEnd={e=> this.setState({tryMarker: e.nativeEvent.coordinate})}
+          >
           
           <Callout onPress={() => this.showMesage()}>
             <Text>An intresting city</Text>
@@ -105,6 +109,16 @@ export default class ReactMaps extends React.Component {
             />
           </Callout>
         </Marker>
+        {this.state.coordinates.map(item => {
+          return(
+            <Marker key={item.name}
+              coordinate={{latitude: item.latitude, longitude: item.longitude}}
+              title={item.name}
+              pinColor={item.color}
+            ></Marker>
+          )
+        })}
+
       </MapView>
       <Carousel
         ref={(c) => { this._carousel = c; }}
@@ -142,11 +156,6 @@ const styles = StyleSheet.create({
     padding: 24,
     borderRadius: 24
   },
-  cardTitel: {
-    color: 'white',
-    fontSize: 22,
-    alignSelf: 'center',
-  },
   cardImage: {
     height: 120,
     width: 300,
@@ -154,5 +163,10 @@ const styles = StyleSheet.create({
     position: 'absolute',
     borderBottomLeftRadius: 24,
     borderBottomRightRadius: 24,
-  }
+  },
+  cardTitel: {
+    color: 'white',
+    fontSize: 22,
+    alignSelf: 'center',
+  },
 });
