@@ -14,7 +14,8 @@
     "react": "17.0.2",
     "react-native": "0.66.1",
     "react-native-maps": "^0.29.3",
-    "react-native-permissions": "^3.1.0"
+    "react-native-permissions": "^3.1.0",
+    "react-native-snap-carousel": "^3.9.1"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
