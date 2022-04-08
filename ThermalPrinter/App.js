@@ -17,7 +17,7 @@ const App = () => {
 
   const main =
     "[C]<font size='wide'><b>BUKTI PEMBAYARAN</b></font>\n" +
-    '================================' +
+    '================================\n' +
     'Baju Muslim Pria[R]Rp120,000,00\n' +
     'x2\n' +
     'Baju Muslim Wanita[R]Rp130,000,00\n' +
