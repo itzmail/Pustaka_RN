@@ -7,36 +7,34 @@ const App = () => {
     getDevice();
   }, []);
 
-  const text =
+  ThermalPrinterModule.defaultConfig.printerWidthMM = 35;
+  ThermalPrinterModule.defaultConfig.autoCut = false;
+  ThermalPrinterModule.defaultConfig.printerNbrCharactersPerLine = 32;
+
+  const logo =
     '[C]<img>https://res.cloudinary.com/dvgiis6ey/image/upload/v1649315878/Work/LogoMutifGray_kdkh11.jpg</img>\n' +
-    // '[L]\n' +
-    // "[C]<font size='normal'>Jl. Raya Padalarang No.783, Ciburuy, Kec. Padalarang, Kabupaten Bandung Barat, Jawa Barat 40553\n</font>" +
+    "[C]<font size='small'>Jl. Raya Padalarang No.783, Ciburuy, Kec. Padalarang, Kabupaten Bandung Barat, Jawa Barat 40553</font>";
+
+  const main =
+    "[C]<font size='wide'><b>BUKTI PEMBAYARAN</b></font>\n" +
+    '================================' +
+    'Baju Muslim Pria[R]Rp120,000,00\n' +
+    'x2\n' +
+    'Baju Muslim Wanita[R]Rp130,000,00\n' +
+    'x1\n' +
     '================================';
-  // '[L]\n';
-  /* +
-    '[L]<b>Baju Koko Putih</b>[R]Rp30,0000,00\n' +
-    '[L]\n' +
-    '[L]<b>Baju Gamis</b>[R]Rp50,000,00\n' +
-    '[L]\n' +
-    '[C]--------------------------------\n' +
-    '[R]TOTAL PRICE :[R]Rp80,000,00\n' +
-    '[L]\n' +
-    '[C]]=========================\n' +
-    '[L]\n' +
-    '[L]\n' +
-    "[C]<barcode type='ean13' height='10'>831254784551</barcode>\n" +
-    "[C]<qrcode size='20'>http://www.developpeur-web.dantsu.com/</qrcode>"; */
 
   async function printSomething() {
     try {
       console.log('Printer Running');
       await ThermalPrinterModule.printBluetooth({
-        payload: text,
+        payload: logo,
         macAddress: '66:22:5A:B0:B6:08',
-        // printerWidthMM: 56,
         printerWidthMM: 50,
-        printerNbrCharactersPerLine: 80,
-        autoCut: false,
+      });
+      await ThermalPrinterModule.printBluetooth({
+        payload: main,
+        macAddress: '66:22:5A:B0:B6:08',
       });
       console.log('Printer Done');
     } catch (e) {
